@@ -31,11 +31,11 @@ export default function Profile() {
   const [dbError, setDbError] = useState<string | null>(null);
   const baseUrl = getBaseUrl();
 
-  // Redirect if not logged in
-  if (!userLoading && !user) {
-    router.push('/');
-    return null;
-  }
+  useEffect(() => {
+    if (!userLoading && !user) {
+      router.push('/');
+    }
+  }, [userLoading, user, router]);
 
   useEffect(() => {
     const fetchDbUserData = async () => {
@@ -68,6 +68,12 @@ export default function Profile() {
 
     fetchDbUserData();
   }, [user, baseUrl]);
+
+  // Redirect if not logged in
+  if (!userLoading && !user) {
+    router.push('/');
+    return null;
+  }
 
   const handlePasswordReset = async () => {
     if (user?.email) {

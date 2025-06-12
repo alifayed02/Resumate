@@ -308,7 +308,7 @@ export function ResumeUpload({ onScoreUpdate, initialResumeText = '', initialJob
                       </div>
                       
                       <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                        <p className="text-sm text-blue-800">PDF ready for analysis. Click "Compare Resume to Job Description" to proceed.</p>
+                        <p className="text-sm text-blue-800">PDF ready for analysis. Click &quot;Compare Resume to Job Description&quot; to proceed.</p>
                       </div>
                     </div>
                   )}

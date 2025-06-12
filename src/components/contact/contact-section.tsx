@@ -56,7 +56,7 @@ const ContactSection: React.FC = () => {
             Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">Touch</span>
           </h2>
           <p className="text-gray-600 text-base">
-            Have questions? We'd love to hear from you.
+            Have questions? We&apos;d love to hear from you.
           </p>
         </div>
 

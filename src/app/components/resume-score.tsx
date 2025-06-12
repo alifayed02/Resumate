@@ -531,7 +531,7 @@ export function ResumeScore({ matchRate, categories, matchedKeywords, jobDescrip
                   ) : (
                     <>
                       <p className="text-lg font-medium text-gray-600 mb-2">Ready to Optimize</p>
-                      <p className="text-sm text-gray-500 text-center">Click the "Optimize" button on the left to generate your improved resume and see it here.</p>
+                      <p className="text-sm text-gray-500 text-center">Click the &quot;Optimize&quot; button on the left to generate your improved resume and see it here.</p>
                     </>
                   )}
                 </CardContent>
