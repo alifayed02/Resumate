@@ -1,4 +1,4 @@
-'use client'; // Added for Next.js App Router compatibility with react-pdf worker
+'use client';
 
 import { useState, useEffect, useRef } from "react"
 import Link from 'next/link';
@@ -9,7 +9,6 @@ import { Zap, ChevronDown, ChevronUp, Check, AlertCircle, X, Download, ChevronLe
 import { Document, Page, pdfjs } from 'react-pdf'
 import { getBaseUrl } from '../../utils/getBaseUrl'
 
-// Explicitly set workerSrc to the path in the public folder
 pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`; 
 
 interface Issue {
