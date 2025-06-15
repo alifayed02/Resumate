@@ -8,7 +8,14 @@ import { motion } from "framer-motion";
 import { Check, Star, CreditCard, CalendarDays } from "lucide-react";
 import { getBaseUrl } from '@/utils/getBaseUrl';
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+let publishable_key = '';
+if(process.env.NODE_ENV === 'production') {
+  publishable_key = process.env.NEXT_PUBLIC_PROD_STRIPE_PUBLISHABLE_KEY!;
+} else if(process.env.NODE_ENV === 'development') {
+  publishable_key = process.env.NEXT_PUBLIC_DEV_STRIPE_PUBLISHABLE_KEY!;
+}
+
+const stripePromise = loadStripe(publishable_key);
 
 const creditPackages = [
   {
