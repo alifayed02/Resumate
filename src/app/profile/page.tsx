@@ -7,11 +7,13 @@ import NavBarGetStarted from '../components/NavBarGetStarted';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getBaseUrl } from '../../utils/getBaseUrl';
+import { sendEmailVerification } from 'firebase/auth';
 
 interface DbUserData {
   _id: string;
   firebase_id: string;
   email: string;
+  verified: boolean;
   credits: number;
   membership: string;
   subscription: string;
@@ -75,6 +77,17 @@ export default function Profile() {
     return null;
   }
 
+  const handleResend = async () => {
+    if (!user) return;                     // safety check
+    try {
+      await sendEmailVerification(user);   // sends the link
+      alert('Verification email sent!');   // UX feedback
+    } catch (err) {
+      console.error(err);
+      alert('Could not resend email');
+    }
+  };
+
   const handlePasswordReset = async () => {
     if (user?.email) {
       await resetPassword(user.email);
@@ -123,7 +136,11 @@ export default function Profile() {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Account Information</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Email</label>
+                <label className="block text-sm font-medium text-gray-700">Email 
+                  <span>
+                    {user?.emailVerified ? <span className="text-green-600"></span> : <span className="text-red-600 text-xs ml-2"> (Verify to access all features)</span>}
+                  </span>
+                </label>
                 <p className="mt-1 text-gray-900">{user?.email}</p>
               </div>
               
@@ -155,6 +172,18 @@ export default function Profile() {
                   </div>
                 )}
               </div>
+              <div>
+                {!user?.emailVerified && (
+                  <div className="">
+                    <button
+                      onClick={handleResend}
+                      className="bg-gradient-to-r from-pink-500 to-purple-500 text-sm text-white px-4 py-2 rounded-md hover:from-pink-600 hover:to-purple-600"
+                    >
+                      Resend Verification Email
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -175,7 +204,7 @@ export default function Profile() {
                   </div>
                   <p className="mt-1 text-gray-900 capitalize">{dbUserData.membership.replace('_', ' ') || 'N/A'}</p>
                   <p className="mt-1 text-sm text-gray-500">
-                    {(dbUserData.membership === 'monthly_unlimited' && dbUserData.subscription !== 'cancelled' && dbUserData.subscription !== 'inactive') ? <span className="text-lg">∞</span> : dbUserData.credits} Credits Remaining
+                    {((dbUserData.membership === 'monthly_unlimited' && dbUserData.subscription !== 'cancelled' && dbUserData.subscription !== 'inactive') || (dbUserData.subscription === 'cancelled')) ? <span className="text-lg">∞</span> : dbUserData.credits} Credits Remaining
                   </p>
               </div>
               
@@ -190,7 +219,7 @@ export default function Profile() {
                   {dbUserData.subscription !== 'active' && (
                     <Link href="/#pricing">
                         <button
-                        className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-2 rounded-md hover:from-pink-600 hover:to-purple-600">
+                        className="bg-gradient-to-r from-pink-500 to-purple-500 text-sm text-white px-4 py-2 rounded-md hover:from-pink-600 hover:to-purple-600">
                   Upgrade to Unlimited
                 </button>
                     </Link>

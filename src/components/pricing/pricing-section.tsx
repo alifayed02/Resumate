@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/hooks/useAuth';
 import { loadStripe } from '@stripe/stripe-js';
 import { motion } from "framer-motion";
@@ -43,6 +44,7 @@ const subscriptionPlan = {
 
 export function PricingSection() {
   const [selectedCredits, setSelectedCredits] = useState(10);
+  const router = useRouter();
   const [isPro, setIsPro] = useState(false);
   const { user, loading } = useAuth();
   const baseUrl = getBaseUrl();
@@ -51,10 +53,16 @@ export function PricingSection() {
 
   const handleCreditPurchase = async () => {
     if (!user) {
-      console.log("No user found");
+      router.push('/');
       return;
     }
     const idToken = await user.getIdToken();
+
+    if (!user.emailVerified) {
+      router.push('/profile');
+      return;
+    }
+
     const res = await fetch(`${baseUrl}/payment/create_payment`, {
       method: "POST",
       headers: { "Content-Type": "application/json",
@@ -78,10 +86,16 @@ export function PricingSection() {
 
   const handlePlanPurchase = async () => {
     if (!user) {
-      console.log("No user found");
+      router.push('/');
       return;
     }
     const idToken = await user.getIdToken();
+
+    if (!user.emailVerified) {
+      router.push('/profile');
+      return;
+    }
+
     const res = await fetch(`${baseUrl}/payment/create_subscription`, {
       method: "POST",
       headers: { "Content-Type": "application/json",

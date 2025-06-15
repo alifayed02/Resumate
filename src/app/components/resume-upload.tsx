@@ -105,6 +105,12 @@ export function ResumeUpload({ onScoreUpdate, initialResumeText = '', initialJob
       return;
     }
 
+    if (!user.emailVerified) {
+      setError("Please verify your email to access this feature.");
+      setIsComparing(false);
+      return;
+    }
+
     // Get resume content based on active tab
     const resumeContent = activeTab === 'upload' ? (uploadedFile ? "" : "") : resumeText
     const jobDescriptionContent = jobDescriptionLink || jobDescription
