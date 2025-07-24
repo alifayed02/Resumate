@@ -8,21 +8,9 @@ import { useAuth } from './hooks/useAuth';
 import { PricingSection } from '@/components/pricing/pricing-section';
 import ContactSection from '@/components/contact/contact-section';
 import { FiUpload, FiTarget, FiLayout, FiShield } from 'react-icons/fi';
-import { useEffect, useState } from 'react';
 
 export default function Home() {
   const { user, loading } = useAuth();
-  const [isSmallScreen, setIsSmallScreen] = useState<boolean>(typeof window !== 'undefined' ? window.innerWidth < 640 : false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSmallScreen(window.innerWidth < 640);
-    };
-
-    handleResize(); // initial check
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   const getStartedLink = loading ? '#' : user ? '/GetStarted' : '/signup';
 
@@ -50,21 +38,19 @@ export default function Home() {
             </ul>
             <div className="mt-4 flex flex-col items-center lg:items-start space-y-2">
               <div className="typewriter-container px-4 py-2  rounded-md flex items-center justify-between w-full lg:w-auto">
-                {/* Only render Typewriter on screens >= sm */}
-                {!isSmallScreen && (
-                  <div className="text-gray-700 text-lg" style={{ width: '340px', whiteSpace: 'nowrap', fontFamily: 'monospace' }}>
-                    Customize my resume for <Typewriter
-                      words={['Google', 'Netflix', 'Meta']}
-                      loop={5}
-                      cursor
-                      cursorStyle='|'
-                      typeSpeed={100}
-                      deleteSpeed={75}
-                      delaySpeed={1000}
-                      onLoopDone={() => console.log('Done with loop!')}
-                    />
-                  </div>
-                )}
+                {/* Typewriter is hidden on screens < sm via Tailwind */}
+                <div className="hidden sm:block text-gray-700 text-lg" style={{ width: '340px', whiteSpace: 'nowrap', fontFamily: 'monospace' }}>
+                  Customize my resume for <Typewriter
+                    words={['Google', 'Netflix', 'Meta']}
+                    loop={5}
+                    cursor
+                    cursorStyle='|'
+                    typeSpeed={100}
+                    deleteSpeed={75}
+                    delaySpeed={1000}
+                    onLoopDone={() => console.log('Done with loop!')}
+                  />
+                </div>
                 <Link href={getStartedLink} legacyBehavior>
                   <a className={`ml-4 px-4 py-2 text-white bg-gradient-to-r from-pink-500 to-purple-500 rounded-md hover:from-pink-600 hover:to-purple-600 focus:outline-none whitespace-nowrap no-underline ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}>
                     Get Started
